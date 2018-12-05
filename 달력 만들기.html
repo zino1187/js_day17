@@ -59,13 +59,17 @@ function createCell(year, month){
 	var text;//달력에 출력될 문자
 	var date=0;//실제로 날짜를 표현하는 수!!
 	var startDay=getStartDayOfMonth(year,month); //해당 월의 시작 요일 ( 0~ 6 사이) 
-	var lastDate;//해당 월이 몇일까지 있는지 정보를 갖는 변수
-
+	var lastDate=getLastDateOfMonth(year,month);//해당 월이 몇일까지 있는지 정보를 갖는 변수
+	
 	for(var a=0;a<6;a++){
 		for(var i=0;i<days.length;i++){
 			if(count >=startDay){
 				date++; //아무때나 하지말고, 시작요일에 도달하면...
-				text=date;
+				if(date<=lastDate){
+					text=date; //마지막날 이전까지는 대입...or 공백..
+				}else{
+					text="";
+				}
 			}else{
 				text="";
 			}
