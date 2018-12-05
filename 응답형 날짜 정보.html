@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>응답형 날짜 정보</title>
+<script src="../lib/common.js"></script>
+<script>
+var year=parseInt(prompt("원하는 연도를 입력하세요"));
+var month=parseInt(prompt("원하는 월을 입력하세요"));
+
+var lastDate=getLastDateOfMonth(year, month-1);
+document.write(lastDate);
+
+//입력받은 월이 몇일까지 있는지 출력, 그리고 무슨요일인지까지 출력
+
+//날짜 객체 생성 
+//var d = new Date();
+//d.setFullYear(year);
+//d.setMonth(month-1); //월은 0부터 시작한다!!!
+//우리가 구하고자 하는것은 현재 월의 마지막날을 구해야
+//되기 때문에 , 일부러 다음달로 설정..
+//d.setMonth(month);//유저가 2월을 원하면 우리는 3월로
+//가야 한다..
+//d.setDate(0);//이전달의 마지막 날!!
+//var lastDate = d.getDate(); //조작된 현재 날짜 구하기
+//document.write(month+" 월은 총"+lastDate+" 일까지 있네요");
+
+</script>
+</head>
+<body>
+
+</body>
+</html>
