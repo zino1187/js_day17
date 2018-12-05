@@ -14,6 +14,8 @@ class Cell{
 		this.div.style.background=this.bg;
 		this.div.innerText=this.text;
 		this.div.style.float="left";
+		this.div.style.color="#fff";
+		this.div.style.fontSize=20+"px";
 
 		this.container.appendChild(this.div);
 	}

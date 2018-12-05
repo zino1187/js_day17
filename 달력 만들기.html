@@ -37,11 +37,13 @@
 <script>
 var content;
 var days=["Sun","Mon","Tue","Wed","Thur","Fri","Sat"];
+var obj=new Date();//달력이 가동되자 마자 현재 날짜는 기본으로 얻음
+//alert(getStartDayOfMonth(obj.getFullYear(),obj.getMonth()));
 
 function init(){
 	content=document.getElementById("content");
 	createDays();//요일 생성
-	createCell();//날짜 셀 생성
+	createCell(obj.getFullYear(),obj.getMonth());//날짜 셀 생성
 }
 function createDays(){
 	for(var i=0;i<7;i++){
@@ -50,9 +52,27 @@ function createDays(){
 }
 //표형태의 2차원 구조는 이중포문으로 처리하면, 추후 데이터 처리가
 //용이 함
-function createCell(){
-	for(var i=0;i<days.length;i++){
-		var cell = new Cell(content,98,98,"dodgerblue","A");
+//이 함수를 호출하는 사람은 원하는 연도와 월을 매개변수로 넘겨야 함!!
+//주의) month 호출시 0부터 시작하므로, 5월을 원한다면, 4를 넘겨라...
+function createCell(year, month){
+	var count=0;//각셀에 횟수를 표현하는 변수
+	var text;//달력에 출력될 문자
+	var date=0;//실제로 날짜를 표현하는 수!!
+	var startDay=getStartDayOfMonth(year,month); //해당 월의 시작 요일 ( 0~ 6 사이) 
+	var lastDate;//해당 월이 몇일까지 있는지 정보를 갖는 변수
+
+	for(var a=0;a<6;a++){
+		for(var i=0;i<days.length;i++){
+			if(count >=startDay){
+				date++; //아무때나 하지말고, 시작요일에 도달하면...
+				text=date;
+			}else{
+				text="";
+			}
+			count++; //날짜를 Cell 에 대입하는 시점은?? n이 각월의 시작요일 이상
+			//일때부터 ...n은 실행부가 어디까지 도달했는지 체크해주는 카운터
+			var cell = new Cell(content,98,98,"dodgerblue", text);	
+		}
 	}
 }
 
