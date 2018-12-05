@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>달력 만들기</title>
+<style>
+.wrapper{
+	width:700px;
+	height:650px;
+	background:yellow;
+	margin:auto;
+}
+.up{
+	width:100%;
+	height:100px;
+}
+.up div{
+	float:left;
+}
+.up div:nth-child(1) , div:nth-child(2){
+	width:15%;
+}
+#title{
+	width:70%;
+	font-size:50px;
+	text-align:center;
+}
+#content{
+	width:100%;
+	height:550px;
+	background:pink;
+	clear:both;
+}
+</style>
+<script src="../lib/common.js"></script>
+<script src="./Cell.js"></script>
+<script>
+var title;
+var content;
+var days=["Sun","Mon","Tue","Wed","Thur","Fri","Sat"];
+var obj=new Date();//달력이 가동되자 마자 현재 날짜는 기본으로 얻음
+//alert(getStartDayOfMonth(obj.getFullYear(),obj.getMonth()));
+
+//이미 생성된 셀을 제어하려면 이 셀들은 메모리에 순서있게 
+//모여 있어야 반복문도 적용하고, 조건도 줄 수 있다..
+var cellArray=[];
+var holyday={
+	"year":2018,
+	"month":4,
+	"date":[
+		{
+			"title":"어린이날",
+			"number":5
+		},
+		{
+			"title":"어버이날",
+			"number":8
+		},
+		{
+			"title":"시험일",
+			"number":14
+		}
+
+	]
+};
+function init(){
+	title=document.getElementById("title");
+	content=document.getElementById("content");
+	createDays();//요일 생성
+	createCell();//셀만 생성
+	setTitle();
+	setText(obj.getFullYear(), obj.getMonth());
+}
+function createDays(){
+	for(var i=0;i<7;i++){
+		var day = new Cell(content,98,98,"red",days[i]);
+	}
+}
+/*------------------------------------------
+셀은 달력의 다음, 이전 버튼을 누를때마다 중복생성하지 말자!!!
+그럼 어떻게?? 최초에 프로그램이 가동되면 그때만 한번 생성하자!!!
+next, prev 버튼처리시 생성된 셀에 텍스트만 교체하자!!
+------------------------------------------*/
+function createCell(){
+	for(var a=0;a<6;a++){
+		for(var i=0;i<days.length;i++){
+			var cell = new Cell(content,98,98,"dodgerblue", "");	
+			//추후 텍스트를 채워넣기 위해서 지금생성되고 있는 셀을 
+			//배열에 쌓아놓자!!
+			cellArray.push(cell);//명단 작성!!!
+		}
+	}
+}
+
+function setText(year, month){
+	var count=0;//각셀에 횟수를 표현하는 변수
+	var text;//달력에 출력될 문자
+	var date=0;//실제로 날짜를 표현하는 수!!
+	var startDay=getStartDayOfMonth(year,month); //해당 월의 시작 요일 ( 0~ 6 사이) 
+	var lastDate=getLastDateOfMonth(year,month);//해당 월이 몇일까지 있는지 정보를 갖는 변수
+	
+	for(var a=0;a<6;a++){
+		for(var i=0;i<days.length;i++){
+			if(count >=startDay){
+				date++; //아무때나 하지말고, 시작요일에 도달하면...
+				if(date<=lastDate){
+					text=date; //마지막날 이전까지는 대입...or 공백..
+					//조건에 맞으면 특별히 기념일 정보를 출력하자!!
+					if(holyday.year==year && holyday.month==month){
+						//제이슨 배열과 현재 날짜와 일치하는지 여부를 조사 
+						for(var k=0; k<holyday.date.length;k++){
+							if(holyday.date[k].number==date){
+								text=holyday.date[k].title;
+								cellArray[count].div.style.background="green"
+							}
+						}
+					}
+				}else{
+					text="";
+				}
+			}else{
+				text="";
+			}
+			cellArray[count].div.innerText=text;
+			count++; //날짜를 Cell 에 대입하는 시점은?? n이 각월의 시작요일 이상
+			//일때부터 ...n은 실행부가 어디까지 도달했는지 체크해주는 카운터
+		}
+	}
+}
+
+//제목처리도 공통적으로 사용되므로, 함수로 빼놓자!!
+function setTitle(){
+	title.innerText=obj.getFullYear()+"년 "+(obj.getMonth()+1)+"월";
+}
+
+//다음 달은 그냥 월을 1증가 시키면 되고, 특히 12월 +1 을 더하면
+//자동으로 연도도 증가되니깐 걱정하지말자...
+function next(){
+	obj.setMonth(obj.getMonth()+1);//현재월 + 1(다음 월)
+	setTitle();
+	setText(obj.getFullYear(),obj.getMonth());
+}
+function prev(){
+	obj.setMonth(obj.getMonth()-1);
+	setTitle();
+	setText(obj.getFullYear(),obj.getMonth());
+}
+addEventListener("load",function(){
+	init();
+});
+</script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="up">
+			<div><button onClick="prev()">이전 달</button></div>
+			<div id="title">2018년 12월</div>
+			<div><button onClick="next()">다음 달</button></div>
+		</div>
+		<div id="content"></div>
+	</div>
+</body>
+</html>
