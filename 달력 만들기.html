@@ -6,7 +6,7 @@
 <style>
 .wrapper{
 	width:700px;
-	height:600px;
+	height:650px;
 	background:yellow;
 	margin:auto;
 }
@@ -27,7 +27,7 @@
 }
 #content{
 	width:100%;
-	height:500px;
+	height:550px;
 	background:pink;
 	clear:both;
 }
@@ -41,12 +41,21 @@ var days=["Sun","Mon","Tue","Wed","Thur","Fri","Sat"];
 function init(){
 	content=document.getElementById("content");
 	createDays();//요일 생성
+	createCell();//날짜 셀 생성
 }
 function createDays(){
 	for(var i=0;i<7;i++){
 		var day = new Cell(content,98,98,"red",days[i]);
 	}
 }
+//표형태의 2차원 구조는 이중포문으로 처리하면, 추후 데이터 처리가
+//용이 함
+function createCell(){
+	for(var i=0;i<days.length;i++){
+		var cell = new Cell(content,98,98,"dodgerblue","A");
+	}
+}
+
 addEventListener("load",function(){
 	init();
 });
